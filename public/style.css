@@ -1,0 +1,89 @@
+input[type="radio"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type="radio"]::after {
+  content: ""; 
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+form {
+  background-color: #f1f1f1;
+  padding-left: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+label, select, button {
+  display: block;
+  margin: 5px 0;
+}
+
+button {
+  background-color: #0085ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #006acc;
+}
+
+input[type="radio"] + label {
+  display: inline-block;
+  padding: 4px 4px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  user-select: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-right: 8px;
+}
+
+input[type="radio"]:checked + label {
+  border-color: #fbfbfb;
+  background-color: #55ccc9;
+}
+
+/* 多选题样式 */
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"] + label {
+  display: inline-block;
+  padding: 4px 4px; 
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-left: 14px;
+  user-select: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-right: 8px;
+}
+
+input[type="checkbox"]:checked + label {
+  border-color: #fbfbfb;
+  background-color: #55ccc9;
+}
