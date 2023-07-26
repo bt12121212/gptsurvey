@@ -151,17 +151,22 @@
   }
 
 
-    function download() {
+  function download() {
+  const correctPassword = 'aaaaaaaa';
   const password = prompt('请输入密码');
 
-  fetch('/api/download?password=' + password)
-    .then(response => {
-      if (response.ok) {
-        window.location.href = '/download?password=' + password;
-      } else {
-        alert('密码错误');
-      }
-    });
+  if (password !== correctPassword) {
+    alert('密码错误');
+  } else {
+    fetch('/api/download?password=' + password)
+      .then(response => {
+        if (response.ok) {
+          window.location.href = '/download?password=' + password;
+        } else {
+          alert('下载错误');
+        }
+      });
+  }
 }
   </script>
 </body>

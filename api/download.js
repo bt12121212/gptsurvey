@@ -1,7 +1,10 @@
 module.exports = (req, res) => {
-    if (req.query.password === 'aaaaaaaa') {
-      res.download('/tmp/result.json');
+    const password = req.query.password;
+    const correctPassword = 'aaaaaaaa';
+
+    if (password === correctPassword) {
+        res.download('/tmp/result.json');
     } else {
-      res.status(403).send('密码错误');
+        res.status(403).send('密码错误');
     }
-  }
+}
