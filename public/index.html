@@ -9,7 +9,7 @@
 
   <div class="container">
     <h1>ChatGPT使用体验调查</h1>
-    <form>
+    <form id="form1">
       <p>问题1: 您使用尊闻行知的频率？</p>
       <input type="radio" id="q1-1" name="q1" value="每天都用">
       <label for="q1-1">每天都用</label><br>
@@ -24,7 +24,7 @@
       <label for="q1-4">很少用到</label><br> 
     </form>
 
-    <form>
+    <form id="form2">
       <p>问题2: 您觉得尊闻行知在哪些场景下最有用？（可多选）</p>
       <input type="checkbox" id="q2-1" name="q2" value="生成文章，如扩写，缩写，概括，润色等">
       <label for="q2-1">生成文章，如扩写，缩写，概括，润色等</label><br>
@@ -51,7 +51,7 @@
       <label for="q2-8">其他</label><br>
     </form>
 
-     <form>
+     <form id="form3">
       <p>问题3: 您主要使用尊闻行知的哪些能力？（可多选）</p>
       <input type="checkbox" id="q3-1" name="q3" value="语言能力，能安排文章框架，快速写文章，润色">
       <label for="q3-1">语言能力，能安排文章框架，快速写文章，润色</label><br>
@@ -71,7 +71,7 @@
       <input type="checkbox" id="q3-6" name="q3" value="其他">
       <label for="q3-6">其他</label><br>
     </form>
-    <form>
+    <form id="form4">
       <p>问题4: 使用尊闻行知后，您觉得您的工作有变化吗？</p>
       <input type="radio" id="q4-1" name="q4" value="很多，工作生活都在用">
       <label for="q4-1">很多，工作生活都在用</label><br>
@@ -83,7 +83,7 @@
       <label for="q4-3">没什么变化</label><br>
     </form>
 
-    <form>
+    <form id="form5">
       <p>问题5: 您最希望获得尊闻行知哪个教程？（会根据结果录制教程）</p>
       <input type="radio" id="q5-1" name="q5" value="如何提高尊闻行知的回答质量">
       <label for="q5-1">如何提高尊闻行知的回答质量</label><br>
@@ -107,7 +107,50 @@
 
   <script src="server.js"></script>
   <script>
-function download() {
+
+    function submitAll() {
+    var data = {};
+
+    // 问题1
+    var q1 = document.querySelector('#form1 input[name="q1"]:checked');
+    data.q1 = q1 ? q1.value : '';
+
+    // 问题2
+    var q2 = Array.from(document.querySelectorAll('#form2 input[name="q2"]:checked')).map(function(checkbox) {
+      return checkbox.value;
+    });
+    data.q2 = q2;
+
+    var q3 = Array.from(document.querySelectorAll('#form3 input[name="q3"]:checked')).map(function(checkbox) {
+      return checkbox.value;
+    });
+    data.q3 = q3;   
+    
+    var q4 = document.querySelector('#form4 input[name="q4"]:checked');
+    data.q4 = q4 ? q4.value : '';
+
+    var q5 = document.querySelector('#form5 input[name="q5"]:checked');
+    data.q5 = q5 ? q5.value : '';
+
+    fetch('/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      alert('问卷已提交，感谢您的回答!');
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+
+
+    function download() {
   const password = prompt('请输入密码');
 
   fetch('/download?password=' + password)
@@ -118,45 +161,7 @@ function download() {
         alert('密码错误');
       }
     });
-}  
-document.querySelector('button[type="submit"]').addEventListener('click', function(event) {
-  event.preventDefault();
-  
-  var data = {};
-
-  // 问题1
-  var q1 = document.querySelector('input[name="q1"]:checked');
-  data.q1 = q1 ? q1.value : '';
-
-  // 问题2
-  var q2 = Array.from(document.querySelectorAll('input[name="q2"]:checked')).map(function(checkbox) {
-    return checkbox.value;
-  });
-  data.q2 = q2;
-
-  // 问题3
-  var q3 = document.querySelector('#q3');
-  data.q3 = q3 ? q3.value : '';
-
-  // 在这里，我们现在有了一个包含所有问题答案的数据对象，您可以将其发送到您的服务器
-  console.log(data);
-
-  fetch('/submit', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log('Success:', data);
-    alert('问卷已提交，感谢您的回答!');
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
-});
+}
   </script>
 </body>
 </html>
