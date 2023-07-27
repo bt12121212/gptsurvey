@@ -105,7 +105,7 @@
   </div>
   <script>
 /*处理提交代码*/
-document.querySelector("#submitButton").addEventListener("click", function(event) {
+document.querySelector("#submitButton").addEventListener("click", async function(event) {
   event.preventDefault();
   var forms = document.querySelectorAll("form");
   var data = {};
@@ -123,33 +123,31 @@ document.querySelector("#submitButton").addEventListener("click", function(event
     }
   }
 
-  var payload = JSON.stringify(["HSET", "sessionData", "username", JSON.stringify(data)]);
+  var payload = ["HSET", "sessionData", "username", JSON.stringify(data)];
   console.log("Payload being sent:", payload);
 
-  fetch("https://native-chow-30493.kv.vercel-storage.com/", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: "Bearer AXcdASQgN2NkNGQyMzYtYjE5Mi00NGZmLWIxODItNmMyNzg3MjgxOWQwNzE5Zjk3ZjMyOWNhNDkyMmE0MWUzYTY1MTUxNjI5MjY="
-    },
-    body: payload
-  })
-  .then(response => {
-    if(response.ok) {
-      return response.json();
+  try {
+    var response = await fetch("https://native-chow-30493.kv.vercel-storage.com/", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: "Bearer AXcdASQgN2NkNGQyMzYtYjE5Mi00NGZmLWIxODItNmMyNzg3MjgxOWQwNzE5Zjk3ZjMyOWNhNDkyMmE0MWUzYTY1MTUxNjI5MjY="
+      },
+      body: JSON.stringify(payload)
+    });
+
+    console.log("Response status:", response.status);
+
+    if (response.ok) {
+      alert("感谢你的回答！");
+      var responseData = await response.json();
+      console.log("Response data:", responseData);
     } else {
-      console.error("Server responded with status", response.status);
-      throw new Error("Server error with status " + response.status);
+      alert("网络错误！");
     }
-  })
-  .then(data => {
-    console.log("Response data:", data);
-    alert("感谢你的回答！");
-  })
-  .catch(err => {
-    console.error("Failed to submit data:", err);
-    alert("网络错误！");
-  });
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 /*处理查看结果代码*/
