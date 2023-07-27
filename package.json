@@ -9,7 +9,8 @@
     "start": "echo 'No start step'"
   },
   "dependencies": {
-    "node-fetch": "^3.0.0"
+    "node-fetch": "^3.0.0",
+    "@vercel/cli": "^31.1.1"
   },
   "engines": {
     "node": "18.x"
