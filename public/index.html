@@ -99,35 +99,40 @@
       <input type="radio" id="q5-5" name="q5" value="其他，请OA联系滕飞">
       <label for="q5-5">其他，请OA联系滕飞</label><br>
     </form> 
-    <button id="submit">提交</button>
+    <button>提交</button>
 
   </div>
   <script>
-    document.getElementById("submit").addEventListener("click", function(event){
-  event.preventDefault();
 
-  var q1 = document.querySelector('input[name="q1"]:checked').value;
-  var q2 = [...document.querySelectorAll('input[name="q2"]:checked')].map(e => e.value);
-  var q3 = [...document.querySelectorAll('input[name="q3"]:checked')].map(e => e.value);
-  var q4 = document.querySelector('input[name="q4"]:checked').value;
-  var q5 = document.querySelector('input[name="q5"]:checked').value;
+  document.querySelector("button").addEventListener("click", function(event) {
+    event.preventDefault();
+    var forms = document.querySelectorAll("form");
+    var data = {};
 
-  var surveyData = {
-    q1: q1,
-    q2: q2,
-    q3: q3,
-    q4: q4,
-    q5: q5
-  };
+    for (var i = 0; i < forms.length; i++) {
+      var form = forms[i];
+      var inputs = form.querySelectorAll("input");
 
-  fetch('your-server-url', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(surveyData)
+      for (var j = 0; j < inputs.length; j++) {
+        var input = inputs[j];
+        if ((input.type == "radio" || input.type == "checkbox") && !input.checked) continue;
+
+        if (!data[form.id]) data[form.id] = {};
+        data[form.id][input.name] = input.value;
+      }
+    }
+
+    fetch("https://native-chow-30493.kv.vercel-storage.com/set/user_1_session/session_token_value", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: "Bearer AXcdASQgN2NkNGQyMzYtYjE5Mi00NGZmLWIxODItNmMyNzg3MjgxOWQwNzE5Zjk3ZjMyOWNhNDkyMmE0MWUzYTY1MTUxNjI5MjY="
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => console.log(data));
   });
-});
   </script>
 </body>
 </html>
