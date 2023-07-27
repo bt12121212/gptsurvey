@@ -118,8 +118,8 @@ document.querySelector("#submitButton").addEventListener("click", function(event
       var input = inputs[j];
       if ((input.type == "radio" || input.type == "checkbox") && !input.checked) continue;
 
-      if (!data[form.id]) data[form.id] = {};
-      data[form.id][input.name] = input.value;
+      var uniqueKey = form.id + "_" + input.id;
+      data[uniqueKey] = input.value;
     }
   }
 
@@ -142,6 +142,8 @@ document.querySelector("#submitButton").addEventListener("click", function(event
   .then(data => console.log(data))
   .catch(err => console.error(err));
 });
+
+
 /*处理查看结果代码*/
   document.querySelector("#downloadButton").addEventListener("click", function(event) {
     event.preventDefault();
