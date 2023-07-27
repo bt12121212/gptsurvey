@@ -2,15 +2,13 @@
   "name": "survey-form",
   "version": "1.0.0",
   "description": "Survey form for user feedback",
-  "main": "survey.js",
   "scripts": {
     "dev": "echo 'No dev step'",
     "build": "echo 'No build step'",
     "start": "echo 'No start step'"
   },
   "dependencies": {
-    "node-fetch": "^3.0.0",
-    "@vercel/cli": "^31.1.1"
+    "node-fetch": "^3.0.0"
   },
   "engines": {
     "node": "18.x"
