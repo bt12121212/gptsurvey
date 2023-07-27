@@ -1,4 +1,5 @@
 async function submitSurvey() {
+    console.log("submitSurvey was called");
     let forms = ['form1', 'form2', 'form3', 'form4', 'form5'];
     let result = {};
 
