@@ -1,12 +1,18 @@
 {
-  "name": "my-survey",
+  "name": "survey-form",
   "version": "1.0.0",
+  "description": "Survey form for user feedback",
+  "main": "survey.js",
   "scripts": {
     "dev": "vercel dev",
-    "start": "vercel start",
-    "deploy": "vercel"
+    "build": "vercel build",
+    "start": "vercel start"
   },
   "dependencies": {
-    "vercel": "^23.1.2"
-  }
+    "node-fetch": "^3.0.0"
+  },
+  "engines": {
+    "node": "14.x"
+  },
+  "license": "ISC"
 }
