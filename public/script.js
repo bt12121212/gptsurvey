@@ -40,7 +40,8 @@ async function submitSurvey() {
     let response = await fetch("/api/download?password=" + password);
 
     alert(response.ok)
-    alert(response.json())
+    let results = await response.json()
+    console.log(results);
     if(response.ok) {
       let results = await response.json();
       console.log(results);
