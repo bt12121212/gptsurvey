@@ -4,9 +4,9 @@
   "description": "Survey form for user feedback",
   "main": "survey.js",
   "scripts": {
-    "dev": "vercel dev",
-    "build": "vercel build",
-    "start": "vercel start"
+    "dev": "echo 'No dev step'",
+    "build": "echo 'No build step'",
+    "start": "echo 'No start step'"
   },
   "dependencies": {
     "node-fetch": "^3.0.0"
