@@ -105,35 +105,46 @@
   </div>
   <script>
 /*处理提交代码*/
-  document.querySelector("button").addEventListener("click", function(event) {
-    event.preventDefault();
-    var forms = document.querySelectorAll("form");
-    var data = {};
+document.querySelector("button").addEventListener("click", function(event) {
+  event.preventDefault();
+  var forms = document.querySelectorAll("form");
+  var data = {};
 
-    for (var i = 0; i < forms.length; i++) {
-      var form = forms[i];
-      var inputs = form.querySelectorAll("input");
+  for (var i = 0; i < forms.length; i++) {
+    var form = forms[i];
+    var inputs = form.querySelectorAll("input");
 
-      for (var j = 0; j < inputs.length; j++) {
-        var input = inputs[j];
-        if ((input.type == "radio" || input.type == "checkbox") && !input.checked) continue;
+    for (var j = 0; j < inputs.length; j++) {
+      var input = inputs[j];
+      if ((input.type == "radio" || input.type == "checkbox") && !input.checked) continue;
 
-        if (!data[form.id]) data[form.id] = {};
-        data[form.id][input.name] = input.value;
-      }
+      if (!data[form.id]) data[form.id] = {};
+      data[form.id][input.name] = input.value;
     }
+  }
 
-    fetch("https://native-chow-30493.kv.vercel-storage.com/set/user_1_session/session_token_value", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: "Bearer AXcdASQgN2NkNGQyMzYtYjE5Mi00NGZmLWIxODItNmMyNzg3MjgxOWQwNzE5Zjk3ZjMyOWNhNDkyMmE0MWUzYTY1MTUxNjI5MjY="
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(data => console.log(data));
+  fetch("https://native-chow-30493.kv.vercel-storage.com/set/user_1_session/session_token_value", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: "Bearer AXcdASQgN2NkNGQyMzYtYjE5Mi00NGZmLWIxODItNmMyNzg3MjgxOWQwNzE5Zjk3ZjMyOWNhNDkyMmE0MWUzYTY1MTUxNjI5MjY="
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => {
+    if(response.ok) {  // response.ok is true if the response status is 200-299
+      alert('感谢回答');
+      return response.json();
+    } else {
+      throw new Error('网络错误');
+    }
+  })
+  .then(data => console.log(data))
+  .catch(error => {
+    console.error(error);
+    alert(error.message);
   });
+});
 /*处理查看结果代码*/
   document.getElementById('downloadButton').addEventListener('click', async () => {
   const password = document.getElementById('password').value;
@@ -146,7 +157,7 @@
   try {
     const url = 'https://native-chow-30493.kv.vercel-storage.com/get/all'; // 替换为你的Vercel KV数据库的URL
     const headers = {
-      Authorization: 'Bearer YOUR_AUTH_TOKEN' // 替换为你的Vercel KV数据库的授权令牌
+      Authorization: 'Bearer AXcdASQgN2NkNGQyMzYtYjE5Mi00NGZmLWIxODItNmMyNzg3MjgxOWQwNzE5Zjk3ZjMyOWNhNDkyMmE0MWUzYTY1MTUxNjI5MjY=' // 替换为你的Vercel KV数据库的授权令牌
     };
     const response = await fetch(url, {headers});
     const data = await response.json();
