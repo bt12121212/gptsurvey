@@ -32,7 +32,7 @@ async function submitSurvey() {
     } else {
       alert("Failed to submit survey!");
     }
-    alert(surveyResult.toString())
+    alert(String(surveyResult))
   }
   
   async function checkSurvey() {
