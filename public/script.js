@@ -35,10 +35,10 @@ async function submitSurvey() {
   }
   
   async function checkSurvey() {
-    let password = prompt("Please enter the password:");
+    let password = prompt("请输入密码:");
     
+    let tempcheck = prompt(password);
     let response = await fetch("/api/download?password=" + password);
-  
     if(response.ok) {
       let results = await response.json();
       console.log(results);
