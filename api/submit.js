@@ -1,7 +1,11 @@
-var fs = require('fs');
+let results = [];
 
 module.exports = (req, res) => {
-  var data = req.body;
-  fs.writeFileSync('/tmp/result.json', JSON.stringify(data), { flag: 'a' }); // 请注意，Vercel上的文件系统是临时的，所以我们不能将数据保存在磁盘上，但是可以在函数执行期间使用它
-  res.json({status: 'success'});
+  if(req.method === 'POST') {
+    let result = req.body;
+    results.push(result);
+    res.status(200).send("保存成功!");
+  } else {
+    res.status(405).send("保存失败");
+  }
 }

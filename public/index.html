@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>ChatGPT Survey</title>
-  <link rel="stylesheet" href="style.css">
+  <title>尊闻行知使用调查</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 
@@ -100,74 +99,13 @@
       <input type="radio" id="q5-5" name="q5" value="其他，请OA联系滕飞">
       <label for="q5-5">其他，请OA联系滕飞</label><br>
     </form> 
-      <button type="button" onclick="submitAll()">提交</button>
-      <button type="button" onclick="download()">下载结果</button>
+    <button onclick="submitSurvey()">提交</button>
+    <form action="/api/download" method="get">
+      <input type="password" name="password">
+      <button type="submit">查看结果</button>
+    </form>
 
   </div>
-
-  <script src="server.js"></script>
-  <script>
-
-    function submitAll() {
-    var data = {};
-
-    // 问题1
-    var q1 = document.querySelector('#form1 input[name="q1"]:checked');
-    data.q1 = q1 ? q1.value : '';
-
-    // 问题2
-    var q2 = Array.from(document.querySelectorAll('#form2 input[name="q2"]:checked')).map(function(checkbox) {
-      return checkbox.value;
-    });
-    data.q2 = q2;
-
-    var q3 = Array.from(document.querySelectorAll('#form3 input[name="q3"]:checked')).map(function(checkbox) {
-      return checkbox.value;
-    });
-    data.q3 = q3;   
-    
-    var q4 = document.querySelector('#form4 input[name="q4"]:checked');
-    data.q4 = q4 ? q4.value : '';
-
-    var q5 = document.querySelector('#form5 input[name="q5"]:checked');
-    data.q5 = q5 ? q5.value : '';
-
-    fetch('/api/submit', {
-   method: 'POST',
-   headers: {
-     'Content-Type': 'application/json',
-   },
-   body: JSON.stringify(data),
-  })
-
-    .then(response => response.json())
-    .then(data => {
-      console.log('Success:', data);
-      alert('问卷已提交，感谢您的回答!');
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-  }
-
-
-  function download() {
-  const correctPassword = 'aaaaaaaa';
-  const password = prompt('请输入密码');
-
-  if (password !== correctPassword) {
-    alert('密码错误');
-  } else {
-    fetch('/api/download?password=' + password)
-      .then(response => {
-        if (response.ok) {
-          window.location.href = '/download?password=' + password;
-        } else {
-          alert('下载错误');
-        }
-      });
-  }
-}
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
