@@ -38,7 +38,7 @@ async function submitSurvey() {
     let password = prompt("请输入密码:");
     let response = await fetch("/api/download?password=" + password);
 
-    let tempcheck = prompt(response.ok,"::",esponse.ok.json());
+    let tempcheck = prompt(esponse.ok.json());
     if(response.ok) {
       let results = await response.json();
       console.log(results);
