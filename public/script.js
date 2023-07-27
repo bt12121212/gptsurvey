@@ -32,6 +32,7 @@ async function submitSurvey() {
     } else {
       alert("Failed to submit survey!");
     }
+    alert(results)
   }
   
   async function checkSurvey() {
