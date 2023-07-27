@@ -99,13 +99,13 @@
       <input type="radio" id="q5-5" name="q5" value="其他，请OA联系滕飞">
       <label for="q5-5">其他，请OA联系滕飞</label><br>
     </form> 
-    <button>提交</button>
+    <button id="submitButton">提交</button>
     <button id="downloadButton">查看结果</button>
     <input type="password" id="password" placeholder="输入密码" />
   </div>
   <script>
 /*处理提交代码*/
-document.querySelector("button").addEventListener("click", function(event) {
+document.querySelector("submitButton").addEventListener("click", function(event) {
   event.preventDefault();
   var forms = document.querySelectorAll("form");
   var data = {};
@@ -123,62 +123,75 @@ document.querySelector("button").addEventListener("click", function(event) {
     }
   }
 
-  fetch("https://native-chow-30493.kv.vercel-storage.com/set/user_1_session/session_token_value", {
+  fetch("https://native-chow-30493.kv.vercel-storage.com/", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: "Bearer AXcdASQgN2NkNGQyMzYtYjE5Mi00NGZmLWIxODItNmMyNzg3MjgxOWQwNzE5Zjk3ZjMyOWNhNDkyMmE0MWUzYTY1MTUxNjI5MjY="
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(["HSET", "sessionData", "username", JSON.stringify(data)])
   })
   .then(response => {
-    if(response.ok) {  // response.ok is true if the response status is 200-299
-      alert('感谢回答');
-      return response.json();
+    if(response.ok) {
+      alert("感谢你的回答！");
     } else {
-      throw new Error('网络错误');
+      alert("网络错误！");
     }
+    return response.json();
   })
   .then(data => console.log(data))
-  .catch(error => {
-    console.error(error);
-    alert(error.message);
-  });
+  .catch(err => console.error(err));
 });
 /*处理查看结果代码*/
-  document.getElementById('downloadButton').addEventListener('click', async () => {
-  const password = document.getElementById('password').value;
-
-  if (password !== 'aaaaaaaa') {
-    alert('密码错误');
-    return;
-  }
-
-  try {
-    const url = 'https://native-chow-30493.kv.vercel-storage.com/get/all'; // 替换为你的Vercel KV数据库的URL
-    const headers = {
-      Authorization: 'Bearer AXcdASQgN2NkNGQyMzYtYjE5Mi00NGZmLWIxODItNmMyNzg3MjgxOWQwNzE5Zjk3ZjMyOWNhNDkyMmE0MWUzYTY1MTUxNjI5MjY=' // 替换为你的Vercel KV数据库的授权令牌
-    };
-    const response = await fetch(url, {headers});
-    const data = await response.json();
+<script>
+  document.querySelector("#view-results-btn").addEventListener("click", function(event) {
+    event.preventDefault();
     
-    // 转换数据为CSV
-    const header = Object.keys(data[0]).join(',');
-    const rows = data.map(obj => Object.values(obj).join(',')).join('\n');
+    var password = document.querySelector("#password").value;
+    if(password !== 'aaaaaaaa') {
+      alert("密码错误");
+      return;
+    }
 
-    const csv = header + '\n' + rows;
+    fetch("https://native-chow-30493.kv.vercel-storage.com/", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: "Bearer AXcdASQgN2NkNGQyMzYtYjE5Mi00NGZmLWIxODItNmMyNzg3MjgxOWQwNzE5Zjk3ZjMyOWNhNDkyMmE0MWUzYTY1MTUxNjI5MjY="
+      },
+      body: JSON.stringify(["HGET", "sessionData", "username"])
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      var csvData = ConvertToCSV(data);
+      var csvBlob = new Blob([csvData], {type: "text/csv"});
+      var csvUrl = URL.createObjectURL(csvBlob);
+      var hiddenElement = document.createElement('a');
+      hiddenElement.href = csvUrl;
+      hiddenElement.target = '_blank';
+      hiddenElement.download = 'results.csv';
+      hiddenElement.click();
+    })
+    .catch(err => console.error(err));
+  });
 
-    // 创建下载链接并触发下载
-    const blob = new Blob([csv], {type: 'text/csv'});
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'survey-results.csv';
-    link.click();
-  } catch (err) {
-    console.error(err);
-    alert('下载失败');
+  function ConvertToCSV(objArray) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    var str = '';
+
+    for (var i = 0; i < array.length; i++) {
+      var line = '';
+      for (var index in array[i]) {
+        if (line != '') line += ','
+        line += array[i][index];
+      }
+
+      str += line + '\r\n';
+    }
+
+    return str;
   }
-});
   </script>
 </body>
 </html>
