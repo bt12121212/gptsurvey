@@ -32,7 +32,7 @@ async function submitSurvey() {
     } else {
       alert("Failed to submit survey!");
     }
-    alert(results)
+    alert(surveyResult)
   }
   
   async function checkSurvey() {
