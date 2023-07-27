@@ -1,26 +1,50 @@
 async function submitSurvey() {
-    console.log("submitSurvey was called");
-    let forms = ['form1', 'form2', 'form3', 'form4', 'form5'];
-    let result = {};
-
-    forms.forEach((formId, index) => {
-      let form = document.getElementById(formId);
-      let questionName = 'q' + (index + 1);
-      let input = form.elements[questionName];
-      result[formId] = input.value;
-    });
-
-    let response = await fetch('/api/submit', {
-      method: 'POST',
+    let forms = [document.getElementById("form1"), 
+                 document.getElementById("form2"), 
+                 document.getElementById("form3"), 
+                 document.getElementById("form4"), 
+                 document.getElementById("form5")];
+    let surveyResult = {};
+  
+    for(let form of forms) {
+      let inputs = form.elements;
+      for(let i = 0; i < inputs.length; i++) {
+        if(inputs[i].checked) {
+          if(Array.isArray(surveyResult[inputs[i].name])) {
+            surveyResult[inputs[i].name].push(inputs[i].value);
+          } else {
+            surveyResult[inputs[i].name] = [inputs[i].value];
+          }
+        }
+      }
+    }
+  
+    let response = await fetch("/api/submit", {
+      method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(result)
+      body: JSON.stringify(surveyResult)
     });
-
+  
     if(response.ok) {
-      alert('Result saved successfully!');
+      alert("Survey submitted successfully!");
     } else {
-      alert('An error occurred while saving the result.');
+      alert("Failed to submit survey!");
     }
   }
+  
+  async function checkSurvey() {
+    let password = prompt("Please enter the password:");
+    
+    let response = await fetch("/api/download?password=" + password);
+  
+    if(response.ok) {
+      let results = await response.json();
+      console.log(results);
+      // Now you can display the results on the page, for example in a new div.
+    } else {
+      alert("Incorrect password!");
+    }
+  }
+  
