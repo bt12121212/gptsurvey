@@ -1,6 +1,7 @@
 module.exports = (req, res) => {
   if(req.method === 'GET') {
     let password = req.query.password;
+    alert(password)
     if(password === 'aaaaaaaa') {
       res.status(200).json(results);
     } else {
