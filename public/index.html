@@ -166,18 +166,18 @@ var timestamp = new Date().getTime(); // 获取当前的时间戳，单位是毫
         'Content-Type': 'application/json',
         Authorization: "Bearer AXcdASQgN2NkNGQyMzYtYjE5Mi00NGZmLWIxODItNmMyNzg3MjgxOWQwNzE5Zjk3ZjMyOWNhNDkyMmE0MWUzYTY1MTUxNjI5MjY="
       },
-      body: JSON.stringify(["HGET", "sessionData", "username"])
+      body: JSON.stringify(["HGETALL", "sessionData"]) // 使用 HGETALL
     })
     .then(response => response.json())
     .then(data => {
       console.log(data);
-      var jsonData = JSON.stringify(data, null, 2); // 使用JSON.stringify，将data转换成一个格式化的JSON字符串
-      var jsonBlob = new Blob([jsonData], {type: "application/json"}); // 创建一个新的Blob对象，包含jsonData的内容
-      var jsonUrl = URL.createObjectURL(jsonBlob); // 创建一个指向该Blob的URL
+      var jsonData = JSON.stringify(data.result, null, 2);
+      var jsonBlob = new Blob([jsonData], {type: "application/json"});
+      var jsonUrl = URL.createObjectURL(jsonBlob);
       var hiddenElement = document.createElement('a');
       hiddenElement.href = jsonUrl;
       hiddenElement.target = '_blank';
-      hiddenElement.download = 'results.json'; // 保存为.json文件
+      hiddenElement.download = 'results.json';
       hiddenElement.click();
     })
     .catch(err => console.error(err));
