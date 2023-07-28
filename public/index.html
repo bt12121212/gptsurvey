@@ -122,8 +122,8 @@ document.querySelector("#submitButton").addEventListener("click", async function
       data[uniqueKey] = input.value;
     }
   }
-
-  var payload = ["HSET", "sessionData", "username", JSON.stringify(data)];
+var timestamp = new Date().getTime(); // 获取当前的时间戳，单位是毫秒
+  var payload = ["HSET", "sessionData", timestamp.toString(), JSON.stringify(data)];
   console.log("Payload being sent:", payload);
 
   try {
@@ -171,13 +171,13 @@ document.querySelector("#submitButton").addEventListener("click", async function
     .then(response => response.json())
     .then(data => {
       console.log(data);
-      var csvData = ConvertToCSV(data);
-      var csvBlob = new Blob([csvData], {type: "text/csv"});
-      var csvUrl = URL.createObjectURL(csvBlob);
+      var jsonData = JSON.stringify(data, null, 2); // 使用JSON.stringify，将data转换成一个格式化的JSON字符串
+      var jsonBlob = new Blob([jsonData], {type: "application/json"}); // 创建一个新的Blob对象，包含jsonData的内容
+      var jsonUrl = URL.createObjectURL(jsonBlob); // 创建一个指向该Blob的URL
       var hiddenElement = document.createElement('a');
-      hiddenElement.href = csvUrl;
+      hiddenElement.href = jsonUrl;
       hiddenElement.target = '_blank';
-      hiddenElement.download = 'results.csv';
+      hiddenElement.download = 'results.json'; // 保存为.json文件
       hiddenElement.click();
     })
     .catch(err => console.error(err));
